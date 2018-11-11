@@ -6,11 +6,15 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class FpcontrollerCs : MonoBehaviour {
 
+    [Header("Sensitivity, 1 for less & 10 for more ")]
+    public float moveSensitivity;
 
+    [Header("Oxygen value (Do not change)")]
     public float oxygen;
     public Image oxygenImage;
     public bool isIndoor;
 
+    [Header("Stamina value (Do not change)")]
     public float stamina;
     public Image staminaImage;
     public bool canRun;
@@ -41,9 +45,11 @@ public class FpcontrollerCs : MonoBehaviour {
     }
     void Update()
     {
-        if ((CrossPlatformInputManager.GetAxis("Vertical") != 0 || CrossPlatformInputManager.GetAxis("Vertical") != 0)&&stamina >=1)
+
+        #if UNITY_IPHONE || UNITY_ANDROID
+        if ((CrossPlatformInputManager.GetAxis("Vertical") != 0 || CrossPlatformInputManager.GetAxis("Vertical") != 0) && stamina >= 1)
         {
-            velocity = new Vector3(CrossPlatformInputManager.GetAxis("Horizontal") * forwardVel/2, 0, CrossPlatformInputManager.GetAxis("Vertical") * forwardVel/2);
+            velocity = new Vector3(CrossPlatformInputManager.GetAxis("Horizontal") * forwardVel / moveSensitivity, 0, CrossPlatformInputManager.GetAxis("Vertical") * forwardVel / moveSensitivity);
             velocity = transform.TransformDirection(velocity);
             velocity.y = rb.velocity.y;
             rb.velocity = velocity;
@@ -55,12 +61,38 @@ public class FpcontrollerCs : MonoBehaviour {
             {
                 StaminaIncrease(2);
             }
-            else 
+            else
             {
                 StaminaIncrease(1);
             }
 
         }
+#endif
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_STANDALONE_LINUX
+        if ((Input.GetAxis("Vertical") != 0 || Input.GetAxis("Vertical") != 0) && stamina >= 1)
+                {
+            velocity = new Vector3(Input.GetAxis("Horizontal") * forwardVel / moveSensitivity, 0, Input.GetAxis("Vertical") * forwardVel / moveSensitivity);
+                    velocity = transform.TransformDirection(velocity);
+                    velocity.y = rb.velocity.y;
+                    rb.velocity = velocity;
+                    StaminaDecrease();
+                }
+        else if ((Input.GetAxis("Vertical") == 0 || Input.GetAxis("Vertical") == 0))
+                {
+                    if (isIndoor)
+                    {
+                        StaminaIncrease(2);
+                    }
+                    else
+                    {
+                        StaminaIncrease(1);
+                    }
+
+                }
+#endif
+
+
+
 
         if (canJump & Input.GetKeyUp(KeyCode.Space))
         {
@@ -99,6 +131,11 @@ public class FpcontrollerCs : MonoBehaviour {
             staminaImage.fillAmount = staminaUiFill;
 
         }
+    }
+
+    public void setIndoor(bool indoor)
+    {
+        isIndoor = indoor;
     }
 
 

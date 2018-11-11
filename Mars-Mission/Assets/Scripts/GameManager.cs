@@ -24,11 +24,6 @@ public class GameManager : MonoBehaviour
         }
         myTime = 2.0f;
     }
-    // Use this for initialization
-    void Start ()
-    {
-		
-	}
 	// Update is called once per frame
 	void Update () 
     {
@@ -36,7 +31,15 @@ public class GameManager : MonoBehaviour
         myTime -= Time.deltaTime;
         if (myTime<=0)
         {
-            temperature = Random.Range(-120,30);
+            if (isDay)
+            {
+                temperature = Random.Range(-50, 30);
+            }
+            else
+            {
+                temperature = Random.Range(-50, -120);
+            }
+
             myTime = 2.0f;
         }
         Debug.Log(myTime);
