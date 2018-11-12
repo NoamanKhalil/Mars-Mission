@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 
             myTime = 2.0f;
         }
-        Debug.Log(myTime);
+        //Debug.Log(myTime);
 
         temperatureText.text = temperature +" °C";
     }
