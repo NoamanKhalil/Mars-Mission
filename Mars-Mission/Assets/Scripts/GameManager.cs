@@ -18,7 +18,8 @@ public class GameManager : MonoBehaviour
     //-120 degrees C to 30 degrees C
     void Awake()
     {
-        Application.targetFrameRate = 120;
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
         if (instance == null)
         {
             instance = this;

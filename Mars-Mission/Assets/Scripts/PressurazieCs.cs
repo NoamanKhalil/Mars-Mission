@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class PressurazieCs : MonoBehaviour
 {
     [SerializeField]
@@ -18,7 +18,7 @@ public class PressurazieCs : MonoBehaviour
 	// Use this for initialization
 	void Start () 
     {
-        timer = 5.0f;
+        timer = 2.0f;
 	} 
 	// Update is called once per frame
 	void Update ()
@@ -54,33 +54,35 @@ public class PressurazieCs : MonoBehaviour
         if (isInOpen && isOutOpen)
         {
             // you dide 
-            //CanvasFadeCs.instance.FadeIn();
+            //
+            CanvasFadeCs.instance.FadeIn();
+            Invoke("die",0.5f);
             Debug.Log("You died");
         }
 
 
         if (!isPressurized && isInOpen)
         {
-            //play sound here 
             //aud.Play();
             Debug.Log("You died");
-            /*timer -= Time.deltaTime;
+            timer -= Time.deltaTime;
             if (timer<=0)
             {
-                //CanvasFadeCs.instance.FadeIn();
-                //Debug.Log("You died");
+                CanvasFadeCs.instance.FadeIn();
+                Invoke("die", 0.5f);
                 //you died 
-            }*/
+            }
         }
         else if (isPressurized&& isInOpen)
         {
             //aud.Play();
             //play sound here again
-            /*timer -= Time.deltaTime;
+            timer -= Time.deltaTime;
             if (timer <= 0)
             {
                 //door open animation 
-            }*/
+
+            }
             Debug.Log("You can move");
         }
         if (!isPressurized && isOutOpen)
@@ -89,7 +91,13 @@ public class PressurazieCs : MonoBehaviour
         }
         else if (isPressurized && isOutOpen)
         {
-            Debug.Log("You died");
+            timer -= Time.deltaTime;
+            if (timer <= 0)
+            {
+                CanvasFadeCs.instance.FadeIn();
+                Invoke("die", 0.5f);
+                //you died 
+            }
         }
 	}
 
@@ -111,6 +119,7 @@ public class PressurazieCs : MonoBehaviour
     }
     void die ()
     {
+        SceneManager.LoadScene("SampleScene");
 
     }
 }
